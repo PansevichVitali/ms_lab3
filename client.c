@@ -52,7 +52,7 @@ int main()
 	fwrite(content, 1, r, fp);
     }
 
-    printf("File has been received successfully\n");
+    printf("File has been sent successfully\n");
 
     fclose(fp);
     close(sock);
