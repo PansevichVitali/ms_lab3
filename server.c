@@ -43,7 +43,7 @@ void* thread_func (void* param)
     sizeCheck += sent;
   }
 
-  printf("File '%s' has been sent successfully\n", sf->filename);
+  printf("File '%s' has been received successfully\n", sf->filename);
 
   close(sf->sock);
   free(sf);
