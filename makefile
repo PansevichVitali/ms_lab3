@@ -1,5 +1,6 @@
-CC=$(CROSS_COMPILE)gcc
+CC := $(CROSS_COMPILE)gcc
 all:
-	$(CC) client.c -o client
+	$(CC) -pthread -o server server.c
+	$(CC) -o client client.c
 clean:
-	rm -rf client
+	rm -f server client server.o client.o
