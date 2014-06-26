@@ -28,7 +28,7 @@ int main()
 
     printf("Enter port: ");
     scanf("%d", &port);
-    
+
     printf("Enter filename: ");
     scanf("%s", filename);
 
