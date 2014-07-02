@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
     exit(1);
   }
 
-  // reate Internet domain socket
+  // create Internet domain socket
   listener = socket(AF_INET, SOCK_STREAM, 0);
   if (listener < 0) {
       perror("Socket");
@@ -107,12 +107,12 @@ int main(int argc, char *argv[])
       strcpy(sf->filename, filename);
 
       if (argv[2] == "t") {
-	rc = pthread_create(&thread_id, NULL, thread_func, (void*)sf);
+		rc = pthread_create(&thread_id, NULL, thread_func, (void*)sf);
       	if (rc)
             printf("Can't create thread!");
       }
       else {
-	pid = fork();
+		pid = fork();
         if (pid == 0) thread_func((void*)sf);
       }
   }
