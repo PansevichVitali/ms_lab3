@@ -50,12 +50,4 @@ int main()
     	r = recv(sock, content, sizeof(content), 0);
 	sizeCheck += r;
 	fwrite(content, 1, r, fp);
-    }
-
-    printf("File has been sent successfully\n");
-
-    fclose(fp);
-    close(sock);
-
-    return 0;
-}
+   
