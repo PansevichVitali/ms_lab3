@@ -1,4 +1,4 @@
-CC := $(CROSS_COMPILE)gcc
+CC = $(CROSS_COMPILE)gcc
 all:
 	$(CC) -pthread -o server server.c
 	$(CC) -o client client.c
