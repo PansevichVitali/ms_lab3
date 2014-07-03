@@ -4,3 +4,4 @@ all:
 	$(CC) -o client client.c
 clean:
 	rm -f server client server.o client.o
+
