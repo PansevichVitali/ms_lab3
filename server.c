@@ -58,18 +58,6 @@ int main(int argc, char *argv[])
 	char filename[1024];
 	int bytes_read;
 
-	// check command line arguments, handling an optional port number
-	if ((argc == 2) || (argc == 3)) {
-		port = atoi(argv[1]);
-		if (port <= 0) {
-			printf("Invalid port: %s\n", argv[1]);
-			exit(1);
-		} 
-	} else if (argc != 1) {
-		printf("Usage: %s [port] [p|t]\n", argv[0]);
-		exit(1);
-	}
-
 	// create Internet domain socket
 	listener = socket(AF_INET, SOCK_STREAM, 0);
 	if (listener < 0) {
