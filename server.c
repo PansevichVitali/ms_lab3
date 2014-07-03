@@ -6,19 +6,19 @@
 #include <stdlib.h>
 #include <string.h>
 
-const int readSize = 1024;
+#define BUF_LENGTH 1000
 
 struct sockFile
 {
 	int sock;
-	char filename[1024];
+	char filename[BUF_LENGTH];
 };
 
 void* thread_func (void* param)
 {
 	long fileSize = 0, sizeCheck = 0;
-	char content[readSize];
-	char fileSizeChar[1024];
+	char content[BUF_LENGTH];
+	char fileSizeChar[BUF_LENGTH];
 	struct sockFile *sf = (struct sockFile*)param;
 	FILE *fp;
 
@@ -34,11 +34,11 @@ void* thread_func (void* param)
 	rewind (fp);
 
 	snprintf(fileSizeChar, sizeof(fileSizeChar), "%ld", fileSize);
-	send(sf->sock, fileSizeChar, 1024, 0);
+	send(sf->sock, fileSizeChar, BUF_LENGTH, 0);
 
 	while (sizeCheck < fileSize){
 		int read, sent;
-		read = fread(content, 1, readSize, fp);
+		read = fread(content, 1, BUF_LENGTH, fp);
 		sent = send(sf->sock, content, read, 0);
 		sizeCheck += sent;
 	}
@@ -52,10 +52,10 @@ void* thread_func (void* param)
 
 int main(int argc, char *argv[]) 
 {
-	int port = 1234;         // default port number to use
+	int port = 1111;         // default port number to use
 	int sock, listener, rc;
 	struct sockaddr_in addr;
-	char filename[1024];
+	char filename[BUF_LENGTH];
 	int bytes_read;
 
 	// create Internet domain socket
@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
 			perror("Accept");
 			exit(3);
 		}
-		bytes_read = recv(sock, filename, 1024, 0);
+		bytes_read = recv(sock, filename, BUF_LENGTH, 0);
 		sf->sock = sock;
 
 		strcpy(sf->filename, filename);

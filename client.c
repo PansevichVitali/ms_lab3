@@ -4,7 +4,7 @@
 #include <netinet/in.h>
 #include <stdlib.h>
 
-const int readSize = 1024;
+#define BUF_LENGTH 1000
 
 int main() 
 {
@@ -12,16 +12,9 @@ int main()
 	long fileSize, sizeCheck = 0;
 	struct sockaddr_in addr;
 	char ip[100];
-	char filename[1024], fileSizeChar[1024];
-	char content[readSize];
+	char filename[BUF_LENGTH], fileSizeChar[BUF_LENGTH];
+	char content[BUF_LENGTH];
 	FILE *fp;
-
-	sock = socket(AF_INET, SOCK_STREAM, 0);
-
-    if (sock < 0) {
-		perror("socket");
-		exit(1);
-	}
 
 	printf("Enter ip address: ");
 	scanf("%s", ip);
@@ -35,6 +28,13 @@ int main()
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(port);
 	addr.sin_addr.s_addr = inet_addr(ip);
+
+	sock = socket(AF_INET, SOCK_STREAM, 0);
+
+    if (sock < 0) {
+		perror("socket");
+		exit(1);
+	}
 
 	if (connect(sock, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
 		perror("Connect");
