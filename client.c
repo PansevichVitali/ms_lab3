@@ -6,7 +6,7 @@
 
 #define BUF_LENGTH 1000
 
-int main() 
+int main()
 {
 	int sock, r, port;
 	long fileSize, sizeCheck = 0;
@@ -31,7 +31,7 @@ int main()
 
 	sock = socket(AF_INET, SOCK_STREAM, 0);
 
-    if (sock < 0) {
+	if (sock < 0) {
 		perror("socket");
 		exit(1);
 	}

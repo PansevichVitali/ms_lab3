@@ -28,10 +28,10 @@ void* thread_func (void* param)
 		exit(1);
 	}
 
-	fseek (fp, 0 , SEEK_END);
+	fseek(fp, 0 , SEEK_END);
 
-	fileSize = ftell (fp);
-	rewind (fp);
+	fileSize = ftell(fp);
+	rewind(fp);
 
 	snprintf(fileSizeChar, sizeof(fileSizeChar), "%ld", fileSize);
 	send(sf->sock, fileSizeChar, BUF_LENGTH, 0);
@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
 		sock = accept(listener, NULL, NULL);
 		sf = (struct sockFile*) malloc (sizeof(struct sockFile));
 
-		if(sock < 0) {
+		if (sock < 0) {
 			perror("Accept");
 			exit(3);
 		}
