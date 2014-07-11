@@ -7,8 +7,9 @@
 #include <string.h>
 
 #define BUF_LENGTH 1000
+#define PTHREAD
 
-struct sockFile
+struct sock_file
 {
 	int sock;
 	char filename[BUF_LENGTH];
@@ -16,10 +17,10 @@ struct sockFile
 
 void* thread_func (void* param)
 {
-	long fileSize = 0, sizeCheck = 0;
+	long file_size = 0, size_check = 0;
 	char content[BUF_LENGTH];
-	char fileSizeChar[BUF_LENGTH];
-	struct sockFile *sf = (struct sockFile*)param;
+	char file_size_char[BUF_LENGTH];
+	struct sock_file *sf = (struct sock_file*)param;
 	FILE *fp;
 
 	fp = fopen(sf->filename, "r");
@@ -30,17 +31,17 @@ void* thread_func (void* param)
 
 	fseek(fp, 0 , SEEK_END);
 
-	fileSize = ftell(fp);
+	file_size = ftell(fp);
 	rewind(fp);
 
-	snprintf(fileSizeChar, sizeof(fileSizeChar), "%ld", fileSize);
-	send(sf->sock, fileSizeChar, BUF_LENGTH, 0);
+	snprintf(file_size_char, sizeof(file_size_char), "%ld", file_size);
+	send(sf->sock, file_size_char, BUF_LENGTH, 0);
 
-	while (sizeCheck < fileSize){
+	while (size_check < file_size){
 		int read, sent;
 		read = fread(content, 1, BUF_LENGTH, fp);
 		sent = send(sf->sock, content, read, 0);
-		sizeCheck += sent;
+		size_check += sent;
 	}
 
 	printf("File '%s' has been received successfully\n", sf->filename);
@@ -50,7 +51,7 @@ void* thread_func (void* param)
 	fclose(fp);
 }
 
-int main(int argc, char *argv[]) 
+int main(int argc, char *argv[])
 {
 	int port = 1111;         // default port number to use
 	int sock, listener, rc;
@@ -78,12 +79,12 @@ int main(int argc, char *argv[])
 
 	int pid;
 	while (1) {
-		struct sockFile *sf;
+		struct sock_file *sf;
 		pthread_t thread_id;
 
 		// wait for a client to connect
 		sock = accept(listener, NULL, NULL);
-		sf = (struct sockFile*) malloc (sizeof(struct sockFile));
+		sf = (struct sock_file*) malloc (sizeof(struct sock_file));
 
 		if (sock < 0) {
 			perror("Accept");
@@ -93,16 +94,15 @@ int main(int argc, char *argv[])
 		sf->sock = sock;
 
 		strcpy(sf->filename, filename);
-
-		if (argv[2] == "t") {
-			rc = pthread_create(&thread_id, NULL, thread_func, (void*)sf);
-			if (rc)
-				printf("Can't create thread!");
-		} else {
-			pid = fork();
-			if (pid == 0) thread_func((void*)sf);
+#ifdef PTHREAD
+		rc = pthread_create(&thread_id, NULL, thread_func, (void*)sf);
+		if (rc)
+			printf("Can't create thread!");
+#else
+		pid = fork();
+		if (pid == 0) thread_func((void*)sf);
 		}
+#endif
 	}
 	return 0;
 }
-
